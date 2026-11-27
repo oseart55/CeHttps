@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/35489722/README.md)
 # CeHttps
 
 **Modern HTTPS for Windows Mobile and Windows CE.** TLS 1.3 and TLS 1.2 for
@@ -357,16 +356,31 @@ request's worker thread. Calling `ch_request_free` inside it is allowed.
 
 You need **Visual Studio 2008 Professional** and the **Windows Mobile 6
 Professional SDK**. Newer versions of Visual Studio can't load Smart Device
-projects. Open `VS\CeHttps.sln` and build **Release**. It contains:
+projects.
+
+wolfSSL is a git submodule (`third_party/wolfssl`, pinned to
+`v5.9.4-stable`), so clone with `--recursive`:
+
+```
+git clone --recursive https://github.com/oseart55/CeHttps.git
+```
+
+(Already cloned? Run `git submodule update --init`.)
+
+Open `VS\CeHttps.sln` and build **Release**. It contains:
 
 - **CeHttpsNative**: the native DLL. It compiles `native\cehttps.c` plus
   wolfSSL's sources, configured by `native\user_settings.h`.
 - **CeHttps**: the .NET wrapper (`VS\CeHttps\*.cs`).
 - **CeHttpsSample**: a small demo app (`VS\CeHttpsSample`).
 
-The wolfSSL 5.9.4 source is expected at `..\BookScanner\wolfssl-5.9.4-stable`
-relative to this folder. Change the include path and file paths in
-`CeHttpsNative.vcproj` if yours is elsewhere.
+The output lands in `VS\CeHttpsNative\Windows Mobile 6 Professional SDK (ARMV4I)\Release\`
+(`CeHttpsNative.dll`, `CeHttpsNative.lib`) and `VS\CeHttps\bin\Release\CeHttps.dll`.
+Ready-built files are attached to each GitHub release.
+
+To build against a newer wolfSSL, check out its tag in `third_party/wolfssl`
+and rebuild. If a release adds or renames source files, update the file list in
+`CeHttpsNative.vcproj`.
 
 Some settings in `user_settings.h` are needed for this platform. Keep them if
 you change the file:

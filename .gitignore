@@ -1,0 +1,20 @@
+# Build output
+bin/
+obj/
+Windows Mobile 6 Professional SDK*/
+*.pdb
+*.obj
+*.idb
+*.ilk
+*.exp
+
+# Visual Studio 2008 per-user files
+*.ncb
+*.suo
+*.user
+*.aps
+
+# Leftovers
+*.old
+*.bak
+*.orig
