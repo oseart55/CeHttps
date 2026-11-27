@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/35489678/README.md)
+[README.md](https://github.com/user-attachments/files/35489722/README.md)
 # CeHttps
 
 **Modern HTTPS for Windows Mobile and Windows CE.** TLS 1.3 and TLS 1.2 for
@@ -235,20 +235,23 @@ using CeHttps;
 ClockSync.Sync();     // optional: fix the device clock over NTP first
 Https.Init();         // loads cacert.pem from the app folder
 
-// GET; the result arrives on the UI thread of `this` (a Form):
+// GET; the callback runs on the UI thread of `this` (a Form):
 Https.GetAsync("https://api.example.com/items", this,
     delegate(HttpsResponse r, HttpsException e) {
-        if (e != null) { label.Text = e.Message; return; }
-        label.Text = r.Status + ": " + r.Text;
+        if (e != null) { statusLabel.Text = "Failed: " + e.Message; return; }
+        if (!r.IsSuccess) { statusLabel.Text = "HTTP " + r.Status; return; }
+        resultBox.Text = r.Text;
     });
 
 // POST JSON with a header and a timeout, and keep the option to cancel:
-HttpsRequest req = new HttpsRequest("POST", "https://api.example.com/scan")
-    .AddHeader("Authorization", "Bearer " + token)
-    .SetJson("{\"ean\":\"9781638581802\"}");
+HttpsRequest req = new HttpsRequest("POST", "https://api.example.com/items")
+    .AddHeader("Accept", "application/json")
+    .SetJson("{\"name\":\"example\"}");
 req.TimeoutMs = 15000;
-HttpsOperation op = Https.SendAsync(req, this, OnScanDone);
+HttpsOperation op = Https.SendAsync(req, this, OnPosted);
 // ... op.Cancel();
+
+void OnPosted(HttpsResponse r, HttpsException e) { /* same pattern as above */ }
 
 // Classic async pattern, or blocking on a thread of your own:
 IAsyncResult ar = Https.BeginSend(req, null, null);
