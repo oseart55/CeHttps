@@ -1,3 +1,6 @@
 [submodule "third_party/wolfssl"]
 	path = third_party/wolfssl
 	url = https://github.com/wolfSSL/wolfssl.git
+	# Git for Windows rewrites line endings when checking wolfSSL out;
+	# that is not a real change, so keep it out of "git status".
+	ignore = dirty
